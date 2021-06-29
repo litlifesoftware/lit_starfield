@@ -13,7 +13,7 @@ class LitStarfieldBackground extends StatefulWidget {
   /// initialized. Set custom values for different behavior.
 
   const LitStarfieldBackground({
-    Key key,
+    Key? key,
     this.animated = true,
     this.showNebulaBackground = true,
     this.showNebulaForeground = true,
@@ -47,7 +47,7 @@ class LitStarfieldBackground extends StatefulWidget {
 
 class _LitStarfieldBackgroundState extends State<LitStarfieldBackground>
     with TickerProviderStateMixin {
-  StarfieldController starfieldController;
+  StarfieldController? starfieldController;
 
   /// State whether or not the starfield has been initially animated.
   bool moved = false;
@@ -55,7 +55,7 @@ class _LitStarfieldBackgroundState extends State<LitStarfieldBackground>
   /// [AnimationController] to enforce a rerender on the [AnimatedBuilder]
   /// [Widget]. Its [Duration] will have any impact because the animation
   /// will be performed by the [Star] object itself.
-  AnimationController _starfieldAnimation;
+  late AnimationController _starfieldAnimation;
   @override
   void initState() {
     super.initState();
@@ -97,7 +97,7 @@ class _LitStarfieldBackgroundState extends State<LitStarfieldBackground>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _starfieldAnimation,
-      builder: (BuildContext context, Widget child) {
+      builder: (BuildContext context, Widget? child) {
         return Container(
           color: Colors.black,
           child: SizedBox(

@@ -1,3 +1,7 @@
-## [0.0.1] - 2020-11-18
+## 0.1.0
 
-The initial release.
+- Migrate to null safety
+
+## 0.0.1
+
+- Initial release.

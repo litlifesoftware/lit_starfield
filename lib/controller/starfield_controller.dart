@@ -24,10 +24,10 @@ class StarfieldController {
   /// Creates a [StarfieldController].
 
   StarfieldController({
-    @required this.starCount,
-    @required this.deviceSize,
-    @required this.travelVelocity,
-    @required this.spaceDepth,
+    required this.starCount,
+    required this.deviceSize,
+    required this.travelVelocity,
+    required this.spaceDepth,
   }) {
     init();
   }
@@ -35,10 +35,10 @@ class StarfieldController {
   /// The [Random] instance used to create aberrations of the
   /// given center point, therefore making the [Star] move towards
   /// the user.
-  Random random;
+  late Random random;
 
   /// The [List] of [Star] objects which will be part of the starfield.
-  List<Star> stars;
+  late List<Star> stars;
 
   Offset get center {
     return Offset(deviceSize.width / 2, deviceSize.height / 2);
@@ -95,7 +95,7 @@ class StarfieldController {
 
   /// Initializes the [StarfieldController] by creating the [Star]s.
   void init() {
-    stars = List<Star>();
+    stars = [];
     for (var i = 0; i < starCount; i++) {
       random = Random();
       double dx = (random.nextDouble() * availableX) - availableX / 2;

@@ -5,7 +5,7 @@ import 'package:lit_starfield/controller/starfield_controller.dart';
 import 'package:lit_starfield/model/star.dart';
 
 class StarfieldPainter extends CustomPainter {
-  final StarfieldController starfieldController;
+  final StarfieldController? starfieldController;
 
   /// State whether or not the [Star] objects will be animated.
   final bool animated;
@@ -24,22 +24,22 @@ class StarfieldPainter extends CustomPainter {
   ///
   /// [CustomPainter] to draw a visual representation of a starfield.
   StarfieldPainter({
-    @required this.starfieldController,
-    @required this.animated,
-    @required this.moved,
-    @required this.setMovedCallback,
-    @required this.showNebulaBackground,
-    @required this.showNebulaForeground,
+    required this.starfieldController,
+    required this.animated,
+    required this.moved,
+    required this.setMovedCallback,
+    required this.showNebulaBackground,
+    required this.showNebulaForeground,
   });
 
   /// The [Paint] used to draw the stars.
-  Paint starPaint;
+  late Paint starPaint;
 
   /// The [Paint] used to draw the nebula foreground.
-  Paint nebulaForeground;
+  late Paint nebulaForeground;
 
   /// The [Paint] used to draw the nebula background.
-  Paint nebulaBackground;
+  late Paint nebulaBackground;
 
   /// Draw a larger [Star] using a consistent size.
   /// Its size will depend on the current [animation] state. If it is not
@@ -63,8 +63,8 @@ class StarfieldPainter extends CustomPainter {
   void transformStars(Size size) {
     if (animated) {
       setMovedCallback(true);
-      for (Star star in starfieldController.stars) {
-        starfieldController.transformStar(star);
+      for (Star star in starfieldController!.stars) {
+        starfieldController!.transformStar(star);
       }
     }
   }
@@ -134,11 +134,11 @@ class StarfieldPainter extends CustomPainter {
 
   /// Draws the [Star] objects on the provided [Canvas].
   void drawStars(Canvas canvas) {
-    for (int i = 0; i < starfieldController.stars.length - 1; i++) {
-      if (i < starfieldController.stars.length ~/ 15) {
-        drawLargeSizedStar(canvas, starfieldController.stars[i], starPaint);
+    for (int i = 0; i < starfieldController!.stars.length - 1; i++) {
+      if (i < starfieldController!.stars.length ~/ 15) {
+        drawLargeSizedStar(canvas, starfieldController!.stars[i], starPaint);
       } else {
-        drawSmallSizedStar(canvas, starfieldController.stars[i], starPaint);
+        drawSmallSizedStar(canvas, starfieldController!.stars[i], starPaint);
       }
     }
   }

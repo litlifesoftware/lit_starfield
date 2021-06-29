@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 
 /// Model class to depict a star in space.
@@ -23,17 +22,17 @@ class Star {
   ///
   /// It will be used to compound the starfield.
   Star({
-    @required this.baseVelocity,
-    @required this.spaceDepth,
-    @required this.dx,
-    @required this.dy,
-    @required this.dz,
+    required this.baseVelocity,
+    required this.spaceDepth,
+    required this.dx,
+    required this.dy,
+    required this.dz,
   });
 
   /// The current [Star]'s radius. This value will be as
   /// reference on the [CustomPainter].
-  double radius;
+  late double radius;
 
   /// Stores the translated [dy] value.
-  Offset translatedOffset;
+  late Offset translatedOffset;
 }
