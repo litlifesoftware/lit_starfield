@@ -7,19 +7,6 @@ import 'package:lit_starfield/model/star.dart';
 class StarfieldPainter extends CustomPainter {
   final StarfieldController? starfieldController;
 
-  /// State whether or not the [Star] objects will be animated.
-  final bool animated;
-
-  /// The callback [Function] executed once the starfield has been
-  /// initially animated.
-  final void Function(bool) setMovedCallback;
-
-  final bool moved;
-
-  final bool showNebulaBackground;
-
-  final bool showNebulaForeground;
-
   /// Creates a [StarfieldPainter] [CustomPainter].
   ///
   /// [CustomPainter] to draw a visual representation of a starfield.
@@ -28,9 +15,16 @@ class StarfieldPainter extends CustomPainter {
     required this.animated,
     required this.moved,
     required this.setMovedCallback,
-    required this.showNebulaBackground,
-    required this.showNebulaForeground,
   });
+
+  /// State whether or not the [Star] objects will be animated.
+  final bool animated;
+
+  /// The callback [Function] executed once the starfield has been
+  /// initially animated.
+  final void Function(bool) setMovedCallback;
+
+  final bool moved;
 
   /// The [Paint] used to draw the stars.
   late Paint starPaint;
@@ -113,25 +107,6 @@ class StarfieldPainter extends CustomPainter {
       ));
   }
 
-  /// Draws the nebula on the provided [Canvas], which will be
-  /// compound of the nebula foreground and background.
-  void drawNebula(Canvas canvas, Size size) {
-    if (showNebulaForeground) {
-      canvas.drawCircle(
-        Offset(size.width / 2, size.height / 2),
-        max(size.height, size.width),
-        nebulaForeground,
-      );
-    }
-    if (showNebulaBackground) {
-      canvas.drawCircle(
-        Offset(size.width / 2, size.height / 2),
-        max(size.height, size.width),
-        nebulaBackground,
-      );
-    }
-  }
-
   /// Draws the [Star] objects on the provided [Canvas].
   void drawStars(Canvas canvas) {
     for (int i = 0; i < starfieldController!.stars.length - 1; i++) {
@@ -149,9 +124,6 @@ class StarfieldPainter extends CustomPainter {
     initStarPaint();
     initNebulaForegroud(size);
     initNebulaBackground(size);
-
-    /// Draw the nebula.
-    drawNebula(canvas, size);
 
     /// Animate the stars.
     transformStars(size);

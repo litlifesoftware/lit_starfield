@@ -9,14 +9,13 @@ import 'package:lit_starfield/view/starfield_painter.dart';
 /// (e.g. as the undermost layer of a [Stack]).
 class LitStarfieldBackground extends StatefulWidget {
   /// Creates a [StarfieldBackground] widget.
+  ///
   /// By default the required values are already
   /// initialized. Set custom values for different behavior.
 
   const LitStarfieldBackground({
     Key? key,
     this.animated = true,
-    this.showNebulaBackground = true,
-    this.showNebulaForeground = true,
     this.starCount = 400,
     this.travelVelocity = 0.5,
     this.spaceDepth = 100,
@@ -24,12 +23,6 @@ class LitStarfieldBackground extends StatefulWidget {
 
   /// States whether or not the starfield should be animated.
   final bool animated;
-
-  /// States whether or not to show the nebula background.
-  final bool showNebulaBackground;
-
-  /// States whether or not to show the nebula foreground.
-  final bool showNebulaForeground;
 
   /// Defines the total number of stars.
   final int starCount;
@@ -109,8 +102,6 @@ class _LitStarfieldBackgroundState extends State<LitStarfieldBackground>
                 moved: moved,
                 setMovedCallback: setMoved,
                 animated: widget.animated,
-                showNebulaBackground: widget.showNebulaBackground,
-                showNebulaForeground: widget.showNebulaForeground,
               ),
             ),
           ),
