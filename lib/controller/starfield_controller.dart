@@ -21,6 +21,9 @@ class StarfieldController {
   /// The depth of the space in which the stars are displayed.
   final double spaceDepth;
 
+  /// States which scale to apply on each star.
+  final double scale;
+
   /// Creates a [StarfieldController].
 
   StarfieldController({
@@ -28,6 +31,7 @@ class StarfieldController {
     required this.deviceSize,
     required this.travelVelocity,
     required this.spaceDepth,
+    required this.scale,
   }) {
     init();
   }
@@ -64,20 +68,20 @@ class StarfieldController {
 
   /// Translates the provided [Star]'s points.
   ///
-  /// Sets the [Star.translatedOffset] values will be defined using the
-  /// current [Star.dx] and [Star.dy] values which will be devided by the
-  /// current [Star.dz] value. The result will be increased by the
-  /// corresponding center point values to center the
-  /// [Star.translatedOffset].
+  /// Sets the [Star.translatedOffset] values will be defined using the current
+  /// [Star.dx] and [Star.dy] values which will be devided by the current
+  /// [Star.dz] value. The result will be increased by the corresponding center
+  /// point values to center the [Star.translatedOffset].
   ///
-  /// The [Star.dz] value will be decreased by the current [Star.velocity]
-  /// in order for the star to travel towards the foreground.
+  /// The [Star.dz] value will be decreased by the current [Star.velocity] in
+  /// order for the star to travel towards the foreground.
   ///
   /// If the [Star.dz] value is below the [Star.baseVelocity], set the [Star.dz]
   /// value again using a random value on the available space.
-  /// The [Star.spaceDepth] will be added. The [Star.radius] will be set to its default.
-  /// Else the [Star.radius] will be adjusted to the current velocity in regard to
-  /// the defined [Star.spaceDepth] and the current [Star.dz] value.
+  /// The [Star.spaceDepth] will be added. The [Star.radius] will be set to its
+  /// default.
+  /// Else the [Star.radius] will be adjusted to the current velocity in regard
+  /// to the defined [Star.spaceDepth] and the current [Star.dz] value.
   void transformStar(Star star) {
     star.translatedOffset =
         Offset((star.dx / star.dz + center.dx), star.dy / star.dz + center.dy);
@@ -87,9 +91,9 @@ class StarfieldController {
     if (star.dz < star.baseVelocity) {
       final Random random = Random();
       star.dz = random.nextDouble() * availableZ + spaceDepth;
-      star.radius = 1.0;
+      star.radius = scale;
     } else {
-      star.radius = (spaceDepth / 8) / star.dz + star.baseVelocity;
+      star.radius = ((spaceDepth / 8) / star.dz + star.baseVelocity) * scale;
     }
   }
 

@@ -18,7 +18,8 @@ class LitStarfieldBackground extends StatefulWidget {
     this.animated = true,
     this.starCount = 400,
     this.travelVelocity = 0.5,
-    this.spaceDepth = 100,
+    this.spaceDepth = 100.0,
+    this.scale = 1.0,
   }) : super(key: key);
 
   /// States whether or not the starfield should be animated.
@@ -34,13 +35,15 @@ class LitStarfieldBackground extends StatefulWidget {
   /// the starfield. The larger it is, the further away the field will be.
   final double spaceDepth;
 
+  final double scale;
+
   @override
   _LitStarfieldBackgroundState createState() => _LitStarfieldBackgroundState();
 }
 
 class _LitStarfieldBackgroundState extends State<LitStarfieldBackground>
     with TickerProviderStateMixin {
-  StarfieldController? starfieldController;
+  late StarfieldController starfieldController;
 
   /// State whether or not the starfield has been initially animated.
   bool moved = false;
@@ -56,7 +59,7 @@ class _LitStarfieldBackgroundState extends State<LitStarfieldBackground>
     _starfieldAnimation = AnimationController(
       vsync: this,
       duration: Duration(
-        seconds: 10,
+        seconds: 20,
       ),
     );
 
@@ -77,6 +80,7 @@ class _LitStarfieldBackgroundState extends State<LitStarfieldBackground>
       deviceSize: MediaQuery.of(context).size,
       travelVelocity: widget.travelVelocity,
       spaceDepth: widget.spaceDepth,
+      scale: widget.scale,
     );
   }
 
@@ -90,7 +94,7 @@ class _LitStarfieldBackgroundState extends State<LitStarfieldBackground>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _starfieldAnimation,
-      builder: (BuildContext context, Widget? child) {
+      builder: (BuildContext context, Widget? _) {
         return Container(
           color: Colors.black,
           child: SizedBox(

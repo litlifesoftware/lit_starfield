@@ -111,9 +111,17 @@ class StarfieldPainter extends CustomPainter {
   void drawStars(Canvas canvas) {
     for (int i = 0; i < starfieldController!.stars.length - 1; i++) {
       if (i < starfieldController!.stars.length ~/ 15) {
-        drawLargeSizedStar(canvas, starfieldController!.stars[i], starPaint);
+        drawLargeSizedStar(
+          canvas,
+          starfieldController!.stars[i],
+          starPaint,
+        );
       } else {
-        drawSmallSizedStar(canvas, starfieldController!.stars[i], starPaint);
+        drawSmallSizedStar(
+          canvas,
+          starfieldController!.stars[i],
+          starPaint,
+        );
       }
     }
   }
