@@ -9,32 +9,30 @@ import 'package:lit_starfield/view/starfield_painter.dart';
 /// (e.g. as the undermost layer of a [Stack]).
 class LitStarfieldBackground extends StatefulWidget {
   /// Creates a [StarfieldBackground] widget.
-  ///
-  /// By default the required values are already
-  /// initialized. Set custom values for different behavior.
 
   const LitStarfieldBackground({
     Key? key,
     this.animated = true,
-    this.starCount = 400,
-    this.travelVelocity = 0.5,
-    this.spaceDepth = 100.0,
+    this.number = 400,
+    this.velocity = 0.3,
+    this.depth = 0.9,
     this.scale = 1.0,
   }) : super(key: key);
 
   /// States whether or not the starfield should be animated.
   final bool animated;
 
-  /// Defines the total number of stars.
-  final int starCount;
+  /// States the total number of stars.
+  final int number;
 
   /// The speed at which the stars will approximating the screen edges.
-  final double travelVelocity;
+  final double velocity;
 
   /// The depth which will determine the user's perspective on viewing
   /// the starfield. The larger it is, the further away the field will be.
-  final double spaceDepth;
+  final double depth;
 
+  /// States which scale to apply on each individual star.
   final double scale;
 
   @override
@@ -43,7 +41,8 @@ class LitStarfieldBackground extends StatefulWidget {
 
 class _LitStarfieldBackgroundState extends State<LitStarfieldBackground>
     with TickerProviderStateMixin {
-  late StarfieldController starfieldController;
+  /// Controller to build the starfield's data layer.
+  late StarfieldController _starfieldController;
 
   /// State whether or not the starfield has been initially animated.
   bool moved = false;
@@ -75,11 +74,11 @@ class _LitStarfieldBackgroundState extends State<LitStarfieldBackground>
     super.didChangeDependencies();
     // Initialize the controller here to ensure it has access to the
     // MediaQuery object.
-    starfieldController = StarfieldController(
-      starCount: widget.starCount,
-      deviceSize: MediaQuery.of(context).size,
-      travelVelocity: widget.travelVelocity,
-      spaceDepth: widget.spaceDepth,
+    _starfieldController = StarfieldController(
+      number: widget.number,
+      size: MediaQuery.of(context).size,
+      velocity: widget.velocity,
+      depth: widget.depth,
       scale: widget.scale,
     );
   }
@@ -102,7 +101,7 @@ class _LitStarfieldBackgroundState extends State<LitStarfieldBackground>
             width: MediaQuery.of(context).size.width,
             child: CustomPaint(
               painter: StarfieldPainter(
-                starfieldController: starfieldController,
+                starfieldController: _starfieldController,
                 moved: moved,
                 setMovedCallback: setMoved,
                 animated: widget.animated,

@@ -1,25 +1,28 @@
-import 'dart:math';
+import 'dart:math' as Math;
 import 'package:flutter/material.dart';
 import 'package:lit_starfield/model/star.dart';
 
 /// Controller class to add functionality to the starfield.
 ///
 /// Each individual star will be generated using the provided configuration.
-/// Thenever the an property has changed (e.g. the [starCount]), the app must
+/// Thenever the an property has changed (e.g. the [number]), the app must
 /// be restarted in order for the [StarfieldController] to be initialized
 /// using the updated configuration.
 class StarfieldController {
   /// The number of stars to be displayed.
-  final int starCount;
+  final int number;
 
-  /// The screen size.
-  final Size deviceSize;
-
-  /// The velocity the stars will travel at.
-  final double travelVelocity;
+  /// The starfield's size.
+  final Size size;
 
   /// The depth of the space in which the stars are displayed.
-  final double spaceDepth;
+  ///
+  /// Its can have any value between `0.0` and `1.0`.
+  final double depth;
+
+  /// The velocity the stars will travel at.
+  ///
+  final double velocity;
 
   /// States which scale to apply on each star.
   final double scale;
@@ -27,88 +30,123 @@ class StarfieldController {
   /// Creates a [StarfieldController].
 
   StarfieldController({
-    required this.starCount,
-    required this.deviceSize,
-    required this.travelVelocity,
-    required this.spaceDepth,
+    required this.number,
+    required this.size,
+    required this.depth,
+    required this.velocity,
     required this.scale,
   }) {
     init();
   }
 
-  /// The [Random] instance used to create aberrations of the
-  /// given center point, therefore making the [Star] move towards
-  /// the user.
-  late Random random;
+  double absoluteVelocity = 0;
+
+  /// The random instance used to create aberrations of the given center point,
+  /// therefore making the [Star]s appear on different locations.
+  late Math.Random random;
 
   /// The [List] of [Star] objects which will be part of the starfield.
-  late List<Star> stars;
+  late List<Star> stars = [];
+
+  /// Returns a revised depth (0-1) based on the provided depth.
+  double get revisedDepth {
+    const double thresholdMin = 0.1;
+    const double thresholdMax = 1.0;
+
+    // If the depth exceeds the minimum
+    if (depth > thresholdMax) {
+      // Return the lower threshold as base depth
+      return ((thresholdMax) - 1.0).abs();
+    }
+    // If the depth exceeds the maximum
+    if (depth < thresholdMin) {
+      // Return the upper threshold as base depth
+      return ((thresholdMin) - 1.0).abs();
+    }
+    return ((depth) - 1.0).abs();
+  }
 
   Offset get center {
-    return Offset(deviceSize.width / 2, deviceSize.height / 2);
+    return Offset(size.width / 2, size.height / 2);
   }
 
-  /// The uttermost [Star]'s x-axis position when it will be
-  /// initialized.
-  double get availableX {
-    return deviceSize.width * spaceDepth;
+  double get maxAxisLength {
+    return Math.max(size.width, size.height);
   }
 
-  /// The uttermost [Star]'s y-axis position when it will be
-  /// initialized.
-  double get availableY {
-    return deviceSize.height * spaceDepth;
+  double get maxAxisLengthAbs {
+    return maxAxisLength.abs();
   }
 
-  /// The uttermost [Star]'s z-axis position when it will be
-  /// initialized.
-  double get availableZ {
-    return spaceDepth * 2;
+  /// The uttermost starfield's x-axis position.
+  double get minX {
+    return size.width * absoluteVelocity;
+  }
+
+  /// The uttermost starfield's y-axis position.
+  double get maxY {
+    return size.height * absoluteVelocity;
   }
 
   /// Translates the provided [Star]'s points.
   ///
-  /// Sets the [Star.translatedOffset] values will be defined using the current
-  /// [Star.dx] and [Star.dy] values which will be devided by the current
-  /// [Star.dz] value. The result will be increased by the corresponding center
-  /// point values to center the [Star.translatedOffset].
+  /// The star will either be transformed to move towards the screen or its
+  /// radius will be updated to create a 'flicker' effect.
   ///
-  /// The [Star.dz] value will be decreased by the current [Star.velocity] in
-  /// order for the star to travel towards the foreground.
+  /// To create an offset, the star's current position are set in relation to
+  /// the provided velocity.
   ///
-  /// If the [Star.dz] value is below the [Star.baseVelocity], set the [Star.dz]
-  /// value again using a random value on the available space.
-  /// The [Star.spaceDepth] will be added. The [Star.radius] will be set to its
-  /// default.
-  /// Else the [Star.radius] will be adjusted to the current velocity in regard
-  /// to the defined [Star.spaceDepth] and the current [Star.dz] value.
+  /// The star's z value is decreased by the starfield's depth to make the star
+  /// appear moving towards the screen.
   void transformStar(Star star) {
+    // Transform
     star.translatedOffset =
         Offset((star.dx / star.dz + center.dx), star.dy / star.dz + center.dy);
+    // Slowly move the star to the size edges.
+    star.dz -= star.baseDepth;
 
-    star.dz -= star.baseVelocity;
-
-    if (star.dz < star.baseVelocity) {
-      final Random random = Random();
-      star.dz = random.nextDouble() * availableZ + spaceDepth;
+    // If the star's z point is closer to the screen than the base depth
+    if (star.dz < star.baseDepth) {
+      // Accelerate it
+      final Math.Random random = Math.Random();
+      star.dz = random.nextDouble() * absoluteVelocity + absoluteVelocity;
       star.radius = scale;
+      // Else only adjust the radius to create a 'flicker' effect.
     } else {
-      star.radius = ((spaceDepth / 8) / star.dz + star.baseVelocity) * scale;
+      star.radius = ((absoluteVelocity / 8) / star.dz + star.baseDepth) * scale;
     }
+  }
+
+  double calcAbsVelo(double relVelo) {
+    // Check if the provided velocity is greater than 0
+    if (!(relVelo > 0.0)) {
+      return maxAxisLengthAbs;
+    }
+
+    double maxDiff = velocity - maxAxisLengthAbs;
+
+    double maxDiffAb = maxDiff.abs() - (maxAxisLengthAbs - 1);
+
+    double velo = (maxDiffAb * (maxAxisLengthAbs / 4) + 1);
+
+    return velo;
   }
 
   /// Initializes the [StarfieldController] by creating the [Star]s.
   void init() {
-    stars = [];
-    for (var i = 0; i < starCount; i++) {
-      random = Random();
-      double dx = (random.nextDouble() * availableX) - availableX / 2;
-      double dy = (random.nextDouble() * availableY) - availableY / 2;
-      double dz = (random.nextDouble() * availableZ) + spaceDepth;
+    absoluteVelocity = calcAbsVelo(velocity);
+    print("rel velo: $velocity abs vel: $absoluteVelocity");
+    print("min x: $minX");
+    print("min y: $maxY");
+    for (var i = 0; i < number; i++) {
+      random = Math.Random();
+      double dx = (random.nextDouble() * minX) - minX / 2;
+      double dy = (random.nextDouble() * maxY) - maxY / 2;
+      double dz = (random.nextDouble() * absoluteVelocity) + absoluteVelocity;
       stars.add(
         Star(
-          baseVelocity: travelVelocity,
-          spaceDepth: spaceDepth,
+          baseDepth: revisedDepth,
+          baseVelocity: absoluteVelocity,
           dx: dx,
           dy: dy,
           dz: dz,
