@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        body: LitStarfieldBackground(),
+        body: LitStarfieldContainer(),
       ),
     );
   }

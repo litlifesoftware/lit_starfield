@@ -3,14 +3,14 @@ import 'package:lit_starfield/controller/starfield_controller.dart';
 import 'package:lit_starfield/model/star.dart';
 import 'package:lit_starfield/view/starfield_painter.dart';
 
-/// The background on which the starfield will be painted on.
+/// Container on which the starfield will be painted on.
 ///
 /// The painter will fit the whole screen, therefore it should only be used as a background
 /// (e.g. as the undermost layer of a [Stack]).
-class LitStarfieldBackground extends StatefulWidget {
-  /// Creates a [StarfieldBackground] widget.
+class LitStarfieldContainer extends StatefulWidget {
+  /// Creates a [LitStarfieldContainer].
 
-  const LitStarfieldBackground({
+  const LitStarfieldContainer({
     Key? key,
     this.animated = true,
     this.number = 400,
@@ -36,10 +36,10 @@ class LitStarfieldBackground extends StatefulWidget {
   final double scale;
 
   @override
-  _LitStarfieldBackgroundState createState() => _LitStarfieldBackgroundState();
+  _LitStarfieldContainerState createState() => _LitStarfieldContainerState();
 }
 
-class _LitStarfieldBackgroundState extends State<LitStarfieldBackground>
+class _LitStarfieldContainerState extends State<LitStarfieldContainer>
     with TickerProviderStateMixin {
   /// Controller to build the starfield's data layer.
   late StarfieldController _starfieldController;
