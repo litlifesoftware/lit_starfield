@@ -10,18 +10,25 @@ import 'package:lit_starfield/view/starfield_painter.dart';
 class LitStarfieldContainer extends StatefulWidget {
   /// Creates a [LitStarfieldContainer].
 
-  const LitStarfieldContainer(
-      {Key? key,
-      this.animated = true,
-      this.number = 400,
-      this.velocity = 0.3,
-      this.depth = 0.9,
-      this.scale = 1.5,
-      this.starColor = Colors.white,
-      this.backgroundDecoration = const BoxDecoration(
-        color: Color(0xFF181818),
-      )})
-      : super(key: key);
+  const LitStarfieldContainer({
+    Key? key,
+    this.animated = true,
+    this.number = 400,
+    this.velocity = 0.3,
+    this.depth = 0.9,
+    this.scale = 1.5,
+    this.starColor = Colors.white,
+    this.backgroundDecoration = const BoxDecoration(
+      gradient: LinearGradient(
+        colors: [
+          Color(0xFF283828),
+          Color(0xFF181818),
+        ],
+        begin: Alignment.topRight,
+        end: Alignment.bottomLeft,
+      ),
+    ),
+  }) : super(key: key);
 
   /// States whether or not the starfield should be animated.
   final bool animated;
