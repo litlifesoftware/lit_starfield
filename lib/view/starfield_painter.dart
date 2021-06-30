@@ -1,17 +1,17 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:lit_starfield/controller/starfield_controller.dart';
 import 'package:lit_starfield/model/star.dart';
 
 class StarfieldPainter extends CustomPainter {
-  final StarfieldController? starfieldController;
+  final StarfieldController controller;
+  final Color starColor;
 
   /// Creates a [StarfieldPainter] [CustomPainter].
   ///
   /// [CustomPainter] to draw a visual representation of a starfield.
   StarfieldPainter({
-    required this.starfieldController,
+    required this.controller,
+    required this.starColor,
     required this.animated,
     required this.moved,
     required this.setMovedCallback,
@@ -28,12 +28,6 @@ class StarfieldPainter extends CustomPainter {
 
   /// The [Paint] used to draw the stars.
   late Paint starPaint;
-
-  /// The [Paint] used to draw the nebula foreground.
-  late Paint nebulaForeground;
-
-  /// The [Paint] used to draw the nebula background.
-  late Paint nebulaBackground;
 
   /// Draw a larger [Star] using a consistent size.
   /// Its size will depend on the current [animation] state. If it is not
@@ -57,8 +51,8 @@ class StarfieldPainter extends CustomPainter {
   void transformStars(Size size) {
     if (animated) {
       setMovedCallback(true);
-      for (Star star in starfieldController!.stars) {
-        starfieldController!.transformStar(star);
+      for (Star star in controller.stars) {
+        controller.transformStar(star);
       }
     }
   }
@@ -66,60 +60,27 @@ class StarfieldPainter extends CustomPainter {
   /// Initializes the star [Paint].
   void initStarPaint() {
     starPaint = Paint()
-      ..color = Colors.white
+      ..color = starColor
       ..strokeCap = StrokeCap.square
       ..style = PaintingStyle.fill;
   }
 
-  /// Initalizes the nebula foreground [Paint].
-  void initNebulaForegroud(Size size) {
-    nebulaForeground = Paint()
-      ..shader = RadialGradient(colors: [
-        Colors.purple.withOpacity(0.10),
-        Colors.blue.withOpacity(0.18),
-        Colors.green.withOpacity(0.115),
-      ], stops: [
-        0.05,
-        0.2,
-        0.75,
-      ]).createShader(Rect.fromCenter(
-        height: size.height,
-        width: size.width,
-        center: Offset(size.width / 2, size.height / 2),
-      ));
-  }
-
-  /// Initalizes the nebula background [Paint].
-  void initNebulaBackground(Size size) {
-    nebulaBackground = Paint()
-      ..shader = RadialGradient(colors: [
-        Colors.pink.withOpacity(0.08),
-        Colors.red.withOpacity(0.15),
-        Colors.white.withOpacity(0.115),
-      ], stops: [
-        0.05,
-        0.2,
-        0.75,
-      ]).createShader(Rect.fromCenter(
-        height: size.height,
-        width: size.width,
-        center: Offset(size.width / 2, size.height / 2),
-      ));
-  }
-
   /// Draws the [Star] objects on the provided [Canvas].
+  ///
+  /// Based on the stars index value, either a smaller or a larger start will
+  /// be painted to create variety.
   void drawStars(Canvas canvas) {
-    for (int i = 0; i < starfieldController!.stars.length - 1; i++) {
-      if (i < starfieldController!.stars.length ~/ 15) {
+    for (int i = 0; i < controller.stars.length - 1; i++) {
+      if (i < controller.stars.length ~/ 15) {
         drawLargeSizedStar(
           canvas,
-          starfieldController!.stars[i],
+          controller.stars[i],
           starPaint,
         );
       } else {
         drawSmallSizedStar(
           canvas,
-          starfieldController!.stars[i],
+          controller.stars[i],
           starPaint,
         );
       }
@@ -130,8 +91,6 @@ class StarfieldPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     /// Initialize the [Paint] objects.
     initStarPaint();
-    initNebulaForegroud(size);
-    initNebulaBackground(size);
 
     /// Animate the stars.
     transformStars(size);

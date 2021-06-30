@@ -10,14 +10,18 @@ import 'package:lit_starfield/view/starfield_painter.dart';
 class LitStarfieldContainer extends StatefulWidget {
   /// Creates a [LitStarfieldContainer].
 
-  const LitStarfieldContainer({
-    Key? key,
-    this.animated = true,
-    this.number = 400,
-    this.velocity = 0.3,
-    this.depth = 0.9,
-    this.scale = 1.0,
-  }) : super(key: key);
+  const LitStarfieldContainer(
+      {Key? key,
+      this.animated = true,
+      this.number = 400,
+      this.velocity = 0.3,
+      this.depth = 0.9,
+      this.scale = 1.5,
+      this.starColor = Colors.white,
+      this.backgroundDecoration = const BoxDecoration(
+        color: Color(0xFF181818),
+      )})
+      : super(key: key);
 
   /// States whether or not the starfield should be animated.
   final bool animated;
@@ -35,6 +39,10 @@ class LitStarfieldContainer extends StatefulWidget {
   /// States which scale to apply on each individual star.
   final double scale;
 
+  /// States the color each star will be painted with.
+  final Color starColor;
+
+  final BoxDecoration backgroundDecoration;
   @override
   _LitStarfieldContainerState createState() => _LitStarfieldContainerState();
 }
@@ -95,16 +103,17 @@ class _LitStarfieldContainerState extends State<LitStarfieldContainer>
       animation: _starfieldAnimation,
       builder: (BuildContext context, Widget? _) {
         return Container(
-          color: Colors.black,
+          decoration: widget.backgroundDecoration,
           child: SizedBox(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: CustomPaint(
               painter: StarfieldPainter(
-                starfieldController: _starfieldController,
+                controller: _starfieldController,
                 moved: moved,
                 setMovedCallback: setMoved,
                 animated: widget.animated,
+                starColor: widget.starColor,
               ),
             ),
           ),
