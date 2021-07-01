@@ -1,10 +1,10 @@
 # LitStarfield
 
-LitStarfield enables you to render an animated starfield to be used as a background for your parent widget.
+A Flutter plugin for rendering an animated starfield.
 
 Visit our [website](https://litlifesoftware.github.io) for more details.
 
-Created and maintained by [LitLifeSoftware](https://www.instagram.com/litlifesw/) (Michael Grigorenko).
+Created and maintained by [LitLifeSoftware](https://www.github.com/litlifesoftware/).
 
 ## Getting Started
 
@@ -16,17 +16,15 @@ For help getting started with Flutter, view Flutter's
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-## Apps built with LitStarfield
+## Screenshots
 
-- [Remaining Lifetime](https://litlifesoftware.github.io/) by LitLifeSoftware - [Google Play](https://play.google.com/store/apps/details?id=com.litlifesoftware.remaining_lifetime)
-
-> Visualize your entire life. Memorize your achievements and make every month count.
-
-> ![alt text](assets/images/Remaining_Lifetime_Screenshot.png "Remaining Lifetime")
+| #1                                                             | #2                                                             | #3                                                             |
+| -------------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------- |
+| ![Screenshots 1](assets/images/Lit_Starfield_Screenshot_1.png) | ![Screenshots 2](assets/images/Lit_Starfield_Screenshot_2.png) | ![Screenshots 3](assets/images/Lit_Starfield_Screenshot_3.png) |
 
 ## Example
 
-Create a `LitStarfieldBackground` object in your parent widget to use it as your background.
+Create a `LitStarfieldContainer` instance in your parent widget to use it as your background.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -46,15 +44,14 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.black,
           title: Center(
             child: Text(
-              "Lit Starfield Demo",
-              textAlign: TextAlign.center,
+              "LitStarfieldDemo",
               style: TextStyle(
                 color: Colors.white,
               ),
             ),
           ),
         ),
-        body: LitStarfieldBackground(),
+        body: LitStarfieldContainer(),
       ),
     );
   }
@@ -66,5 +63,7 @@ to take a look at the example app provided in the `example` folder. Feel free to
 experiment with the UI.
 
 ## License
+
+All images in the `assets/images` folder are licensed under the **CC-BY**.
 
 The source code is distributed under the **BSD 3-Clause** license as specified in the `LICENSE` file.
