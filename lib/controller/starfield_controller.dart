@@ -66,14 +66,17 @@ class StarfieldController {
     return ((depth) - 1.0).abs();
   }
 
+  /// Returns the view port's center point.
   Offset get center {
     return Offset(size.width / 2, size.height / 2);
   }
 
+  /// Returns the larger view port axis (x,y).
   double get maxAxisLength {
     return Math.max(size.width, size.height);
   }
 
+  /// Returns the larger view port axis (x,y) as an absolute value.
   double get maxAxisLengthAbs {
     return maxAxisLength.abs();
   }
@@ -93,8 +96,8 @@ class StarfieldController {
   /// The star will either be transformed to move towards the screen or its
   /// radius will be updated to create a 'flicker' effect.
   ///
-  /// To create an offset, the star's current position are set in relation to
-  /// the provided velocity.
+  /// To create a transform offset, the star's current position are set in
+  /// relation to the provided velocity.
   ///
   /// The star's z value is decreased by the starfield's depth to make the star
   /// appear moving towards the screen.
@@ -117,6 +120,8 @@ class StarfieldController {
     }
   }
 
+  /// Calculates a absolute velocity based on the current view port and returns
+  /// its value.
   double calcAbsVelo(double relVelo) {
     // Check if the provided velocity is greater than 0
     if (!(relVelo > 0.0)) {
@@ -130,6 +135,11 @@ class StarfieldController {
     double velo = (maxDiffAb * (maxAxisLengthAbs / 4) + 1);
 
     return velo;
+  }
+
+  /// Disposes the controller state by emptying the [stars] list.
+  void dispose() {
+    stars = [];
   }
 
   /// Initializes the [StarfieldController] by creating the [Star]s.

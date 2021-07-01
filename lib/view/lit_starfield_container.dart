@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:lit_starfield/controller/starfield_controller.dart';
-import 'package:lit_starfield/model/star.dart';
 import 'package:lit_starfield/view/starfield_painter.dart';
 
-/// Container on which the starfield will be painted on.
+/// A Container on which a starfield will be painted on.
 ///
-/// The painter will fit the whole screen, therefore it should only be used as a background
-/// (e.g. as the undermost layer of a [Stack]).
+/// The painter will fit the whole screen, therefore it is recommended to use
+/// this container as background.
 class LitStarfieldContainer extends StatefulWidget {
   /// Creates a [LitStarfieldContainer].
 
@@ -14,7 +13,7 @@ class LitStarfieldContainer extends StatefulWidget {
     Key? key,
     this.animated = true,
     this.number = 400,
-    this.velocity = 0.3,
+    this.velocity = 0.7,
     this.depth = 0.9,
     this.scale = 1.5,
     this.starColor = Colors.white,
@@ -39,16 +38,22 @@ class LitStarfieldContainer extends StatefulWidget {
   /// The speed at which the stars will approximating the screen edges.
   final double velocity;
 
-  /// The depth which will determine the user's perspective on viewing
-  /// the starfield. The larger it is, the further away the field will be.
+  /// The depth of the space, the will be painted on starfield.
+  ///
+  /// The larger the depth it is, the further the field will be stretched.
+  ///
+  /// Only relative values are accepted (`0.0`-`1.0`).
   final double depth;
 
   /// States which scale to apply on each individual star.
+  ///
+  /// Only relative values are accepted (`0.0`-`1.0`).
   final double scale;
 
   /// States the color each star will be painted with.
   final Color starColor;
 
+  /// The container's background decoration.
   final BoxDecoration backgroundDecoration;
   @override
   _LitStarfieldContainerState createState() => _LitStarfieldContainerState();
@@ -57,14 +62,13 @@ class LitStarfieldContainer extends StatefulWidget {
 class _LitStarfieldContainerState extends State<LitStarfieldContainer>
     with TickerProviderStateMixin {
   /// Controller to build the starfield's data layer.
-  late StarfieldController _starfieldController;
+  late StarfieldController _controller;
 
   /// State whether or not the starfield has been initially animated.
   bool moved = false;
 
-  /// [AnimationController] to enforce a rerender on the [AnimatedBuilder]
-  /// [Widget]. Its [Duration] will have any impact because the animation
-  /// will be performed by the [Star] object itself.
+  /// [AnimationController] enforces a re-render on the [AnimatedBuilder]
+  /// widget. Its [Duration] won't have any impact.
   late AnimationController _starfieldAnimation;
   @override
   void initState() {
@@ -80,6 +84,7 @@ class _LitStarfieldContainerState extends State<LitStarfieldContainer>
     _starfieldAnimation.repeat(reverse: false);
   }
 
+  /// Sets the [moved] value.
   void setMoved(bool value) {
     moved = value;
   }
@@ -87,9 +92,9 @@ class _LitStarfieldContainerState extends State<LitStarfieldContainer>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Initialize the controller here to ensure it has access to the
-    // MediaQuery object.
-    _starfieldController = StarfieldController(
+    // Initialize the controller on didChangeDependencies to ensure it has
+    // access to the BuildContext.
+    _controller = StarfieldController(
       number: widget.number,
       size: MediaQuery.of(context).size,
       velocity: widget.velocity,
@@ -101,6 +106,7 @@ class _LitStarfieldContainerState extends State<LitStarfieldContainer>
   @override
   void dispose() {
     _starfieldAnimation.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -116,7 +122,7 @@ class _LitStarfieldContainerState extends State<LitStarfieldContainer>
             width: MediaQuery.of(context).size.width,
             child: CustomPaint(
               painter: StarfieldPainter(
-                controller: _starfieldController,
+                controller: _controller,
                 moved: moved,
                 setMovedCallback: setMoved,
                 animated: widget.animated,

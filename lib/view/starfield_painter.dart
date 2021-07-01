@@ -2,13 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lit_starfield/controller/starfield_controller.dart';
 import 'package:lit_starfield/model/star.dart';
 
+/// A Flutter custom painter drawing a starfield on a [CustomPaint].
 class StarfieldPainter extends CustomPainter {
-  final StarfieldController controller;
-  final Color starColor;
-
-  /// Creates a [StarfieldPainter] [CustomPainter].
-  ///
-  /// [CustomPainter] to draw a visual representation of a starfield.
+  /// Creates a [StarfieldPainter].
   StarfieldPainter({
     required this.controller,
     required this.starColor,
@@ -16,6 +12,12 @@ class StarfieldPainter extends CustomPainter {
     required this.moved,
     required this.setMovedCallback,
   });
+
+  /// The controller providing the star data and transform logic.
+  final StarfieldController controller;
+
+  /// The color each star will be painted with.
+  final Color starColor;
 
   /// State whether or not the [Star] objects will be animated.
   final bool animated;
