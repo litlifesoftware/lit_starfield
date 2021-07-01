@@ -145,9 +145,7 @@ class StarfieldController {
   /// Initializes the [StarfieldController] by creating the [Star]s.
   void init() {
     absoluteVelocity = calcAbsVelo(velocity);
-    print("rel velo: $velocity abs vel: $absoluteVelocity");
-    print("min x: $minX");
-    print("min y: $maxY");
+
     for (var i = 0; i < number; i++) {
       random = Math.Random();
       double dx = (random.nextDouble() * minX) - minX / 2;
