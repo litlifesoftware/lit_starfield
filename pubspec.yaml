@@ -1,5 +1,5 @@
 name: lit_starfield
-description: A Flutter plugin for rendering an animated starfield.
+description: A Flutter plugin for rendering an animated and customizable starfield on a dark background.
 version: 0.1.0
 homepage: https://github.com/litlifesoftware/lit_starfield
 
